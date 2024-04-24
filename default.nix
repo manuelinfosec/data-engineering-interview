@@ -18,6 +18,8 @@ in pkgs.mkShell rec {
                 # be parsimonious with 3rd party dependencies; better to show off your own code than someone else's
                 ipython
                 nose
+                requests
+                beautifulsoup4
             ];
         })
     ]);
