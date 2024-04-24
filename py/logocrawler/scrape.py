@@ -81,7 +81,7 @@ def save_image(
             f.write(image_data)
 
         return image_path
-    except OSError as e:
+    except OSError:
         return None
 
 
@@ -145,7 +145,7 @@ def parse_logo(website: str, source: str) -> str:
     #         )
     #         logo_url = first_image_tag["src"]
     #     except (AttributeError, TypeError):
-    pass
+    #        pass
 
     # 6. Final Resort: Query Public Logo API
     if not logo_url:
