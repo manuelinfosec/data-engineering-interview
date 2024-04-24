@@ -1,18 +1,66 @@
 """Utility module"""
 
+import os
 import re
+import requests
 
 import bs4
 
+CLEARBIT_URL = "https://logo.clearbit.com/"
 IMAGE_FORMATS = [".jpg", ".png", ".svg"]
 
 
-def is_image_tag(tag):
+def download_image(website: str) -> bytes:
+    """
+    Downloads image from a URL
+    """
+    # Build URL string
+    logo_url = f"{CLEARBIT_URL}/{website}"
+
+    try:
+        # query ClearBit Public Logo APIs as a last resort
+        response = requests.get(logo_url, stream=True, timeout=5)
+        response.raise_for_status()
+        return response.content
+    except (
+        # Used ChatGPT to determine each of these exceptions (without reading documentation)
+        requests.exceptions.RequestException,
+        requests.exceptions.ConnectionError,
+        requests.exceptions.ConnectTimeout,
+    ):
+        return None
+
+
+def save_image(
+    image_data: bytes, file_name: str, data_folder: str = "data"
+) -> str | None:
+    """
+    Saves the downloaded image data to `data` folder
+    """
+    # create `data` folder
+    os.makedirs(data_folder, exist_ok=True)
+
+    # construct file path
+    filename = f"image_{file_name}.jpg"
+    image_path = os.path.join(data_folder, filename)
+
+    # Save the image content to the file
+    try:
+        with open(image_path, "wb") as f:
+            f.write(image_data)
+
+        return image_path
+    except OSError as e:
+        print(f"Error saving image: {e}")
+        return None
+
+
+def is_image_tag(tag: bs4.element.Tag) -> bool:
     """Checks if a tag is of image-related type"""
     return tag.name == "img" or tag.name == "svg" or tag.name == "picture"
 
 
-def parse_logo(source: str) -> str:
+def parse_logo(website: str, source: str) -> str:
     """
     Parses HTML page source (source) and extracts the logo URL.
 

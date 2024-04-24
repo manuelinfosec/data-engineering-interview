@@ -1,9 +1,9 @@
+"""A program that will crawl a list of website and output their logo URLs."""
+
 from typing import Optional
 
 import requests
-
-
-from utils import parse_logo
+from utils import download_image, parse_logo, save_image
 
 
 def collect_websites() -> list[str]:
@@ -51,14 +51,31 @@ def main():
     print("Starting scraping...\n")
     for website in websites:
         print(f"Website: {website}")
+
+        # add a schema to website
         website = prepend_http(website)
 
+        # fetch page HTML source
         page_source = fetch_page_source(website)
+
+        # If website is unreachable for scraping, use Public Logo API
         if page_source is None:
-            print(f"Not Reachable: {website}")
+
+            # download and save image to local drive
+            logo_bytes = download_image(website)
+            logo_url = save_image(logo_bytes)
+
+            # display path to local image
+            print("******************************************************************")
+            print(logo_url)
+
+            # skip to next website
             continue
 
-        logo_url = parse_logo(page_source)
+        # parse page HTML and extract possible logo URL
+        logo_url = parse_logo(website, page_source)
+
+        # Display full logo URL
         print("******************************************************************")
         print(logo_url)
 
