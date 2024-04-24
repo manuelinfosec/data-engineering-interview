@@ -1,0 +1,20 @@
+=== Scraping Rules =========
+1. Check for the first class that has the string "logo" in it.
+2. Check the first value that has the string "logo" in src.
+3. Check the first alt attribute with the string "logo" in src.
+4. Collect the meta property of "og:image"
+5. Collect the first .jpg,.png,.svg on the site. 
+6. Query https://logo.clearbit.com/{domain}
+
+==== Work on ============
+1. Log issue website.
+2. Work on schema type.
+3. Switch OG:Meta to under source
+4. Measuring precision and recall.
+
+==== Discuss =======
+1. Scraping CSS files.
+2. Using Public logo API (logo.clearbit.com)
+3. Optimizations (Rust for production, storing queried domain logos)
+4. Bugs encountered on collecting first image.
+
