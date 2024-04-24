@@ -15,7 +15,6 @@ def append_schema(url: str, website: str):
     """
     Checks if a string contains a schema or append to it
     """
-    print(url, website)
     # allowed schema
     allowed_schemas = ["http://", "https://"]
 
@@ -83,7 +82,6 @@ def save_image(
 
         return image_path
     except OSError as e:
-        print(f"Error saving image: {e}")
         return None
 
 
@@ -107,40 +105,36 @@ def parse_logo(website: str, source: str) -> str:
     try:
         logo_class: bs4.element.Tag = soup.find(class_=re.compile(".*logo.*"))
         if logo_class and is_image_tag(logo_class):
-            print("Logo Class detected")
             logo_url = logo_class.get("src")
-    except (AttributeError, TypeError) as e:
-        print("Error extracting logo class: ", e)
+    except (AttributeError, TypeError):
+        pass
 
     # 2. Check the first value that has the string "logo" in src.
     if not logo_url:
         try:
             logo_src: bs4.element.Tag = soup.find(src=re.compile(".*logo.*"))
             if logo_src and is_image_tag(logo_src):
-                print("Logo Src Detected")
                 logo_url = logo_src.get("src")
-        except (AttributeError, TypeError) as e:
-            print("Error extracting logo `src`: ", e)
+        except (AttributeError, TypeError):
+            pass
 
     # 3. Collect the meta property of "og:image"
     if not logo_url:
         try:
             og_image: bs4.element.Tag = soup.find("meta", property="og:image")
             if og_image:
-                print("OG Meta detected")
                 logo_url = og_image.get("content")
-        except (AttributeError, TypeError) as e:
-            print("Error extracting og:image meta: ", e)
+        except (AttributeError, TypeError):
+            pass
 
     # 4. Check the first alt attribute with the string "logo" in it.
     if not logo_url:
         try:
             logo_alt: bs4.element.Tag = soup.find(attrs={"alt": re.compile(".*logo.*")})
             if logo_alt and is_image_tag(logo_alt):
-                print("Logo Alt Detected")
                 logo_url = logo_alt.get("src")
-        except (AttributeError, TypeError) as e:
-            print("Error extracting logo alt: ", e)
+        except (AttributeError, TypeError):
+            pass
 
     # UNUSED: 5. Collect the first .jpg, .png, .svg on the site.
     # if not logo_url:
@@ -150,8 +144,8 @@ def parse_logo(website: str, source: str) -> str:
     #             src=lambda s: any(format in s for format in IMAGE_FORMATS)
     #         )
     #         logo_url = first_image_tag["src"]
-    #     except (AttributeError, TypeError) as e:
-    #         print("Error extracting first image: ", e)
+    #     except (AttributeError, TypeError):
+    pass
 
     # 6. Final Resort: Query Public Logo API
     if not logo_url:

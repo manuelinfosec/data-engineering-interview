@@ -37,23 +37,22 @@ def fetch_page_source(website: str) -> Optional[str]:
         requests.exceptions.RequestException,
         requests.exceptions.ConnectionError,
         requests.exceptions.ConnectTimeout,
-    ) as e:
+    ):
         # TODO: Log website and error message for further probing
-        print(f"Error fetching page source for {website}: {e}")
         return None
 
 
 def main():
     """Program entry point."""
     websites = collect_websites()
-
-    # TODO: CSV Headers
     print("Starting scraping...\n")
-    for website in websites:
-        print(f"Website: {website}")
+    
+    # CSV Headers
+    print("website,path")
 
+    for domain in websites:
         # add a schema to website
-        website = prepend_http(website)
+        website = prepend_http(domain)
 
         # fetch page HTML source
         page_source = fetch_page_source(website)
@@ -65,8 +64,7 @@ def main():
             logo_url = save_image(logo_bytes, website)
 
             # display path to local image
-            print("******************************************************************")
-            print(logo_url)
+            print(f"{domain},{logo_url}")
 
             # skip to next website
             continue
@@ -74,9 +72,7 @@ def main():
         # parse page HTML and extract possible logo URL
         logo_url = parse_logo(website, page_source)
 
-        # display full logo URL
-        print("******************************************************************")
-        print(logo_url)
+        print(f"{domain},{logo_url}")
 
 
 if __name__ == "__main__":
