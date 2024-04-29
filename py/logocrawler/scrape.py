@@ -17,6 +17,20 @@ def prepend_http(website: str) -> str:
         website = "http://" + website
     return website
 
+def _append_schema(url: str, website: str):
+    """
+    Checks if a string contains a schema or append to it
+    """
+    # allowed schema
+    allowed_schemas = ("http://", "https://")
+
+    # check if the URL starts with an allowed schema
+    if not url.startswith(allowed_schemas):
+        # write the website and schema to the beginning of the URI
+        url = website + url
+
+    return url
+
 
 def download_image(website: str) -> bytes:
     """
