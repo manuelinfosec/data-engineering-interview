@@ -3,7 +3,7 @@
 from typing import Optional
 
 import requests
-from scrape import download_image, parse_logo, save_image
+from scrape import download_image, parse_logo, save_image, prepend_http
 
 
 def collect_websites() -> list[str]:
@@ -16,13 +16,6 @@ def collect_websites() -> list[str]:
             break
         websites.append(line.strip())
     return websites
-
-
-def prepend_http(website: str) -> str:
-    """Adds 'http://' to the website URL if it doesn't already start with it."""
-    if not website.startswith("http"):
-        website = "http://" + website
-    return website
 
 
 def fetch_page_source(website: str) -> Optional[str]:
@@ -46,7 +39,7 @@ def main():
     """Program entry point."""
     websites = collect_websites()
     print("Starting scraping...\n")
-    
+
     # CSV Headers
     print("website,path")
 
