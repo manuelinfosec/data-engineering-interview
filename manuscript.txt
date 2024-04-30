@@ -2,7 +2,7 @@
 1. Check for the first class that has the string "logo" in it.
 2. Check the first value that has the string "logo" in src.
 3. Check the first alt attribute with the string "logo" in src.
-4. Collect the meta property of "og:image"
+4. Collect the meta property of "og:image" (Open Graph Protocol).
 5. Collect the first .jpg,.png,.svg on the site. 
 6. Query https://logo.clearbit.com/{domain}
 
@@ -15,6 +15,6 @@
 ==== Discuss =======
 1. Scraping CSS files.
 2. Using Public logo API (logo.clearbit.com)
-3. Optimizations (Rust for production, storing queried domain logos)
+3. Optimizations (Rust for production, storing queried domain logos, resizing favicons with bicubic interpolation)
 4. Bugs encountered on collecting first image.
 
