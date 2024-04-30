@@ -20,6 +20,7 @@ in pkgs.mkShell rec {
                 nose
                 requests
                 beautifulsoup4
+                pytest
             ];
         })
     ]);
