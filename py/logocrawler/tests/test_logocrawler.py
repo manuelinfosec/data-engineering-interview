@@ -21,10 +21,10 @@ def test_parse_logo():
 
 def test_strip_illegal():
     """Test the `strip_illegal` function"""
-    # Test with various URLs containing illegal characters
+    # test with various URLs containing illegal characters
     assert strip_illegal("https://twitter.com") == "twitter.com"
     assert strip_illegal("http://twitter.com") == "twitter.com"
-    assert strip_illegal("https://twitter.com/?q=test") == "twitter.com_q=test"
+    assert strip_illegal("https://twitter.com/?q=test") == "twitter.com__q=test"
     assert (
         strip_illegal("https://twitter.com/path/to/file.jpg")
         == "twitter.com_path_to_file.jpg"
@@ -32,15 +32,15 @@ def test_strip_illegal():
     assert strip_illegal("https://twitter.com:8080") == "twitter.com_8080"
     assert (
         strip_illegal("https://twitter.com/<script>alert('Hello')</script>")
-        == "twitter.com_script>alert('Hello')_script_"
+        == "twitter.com__script_alert('Hello')__script_"
     )
-    assert strip_illegal('https://twitter.com/<>:"/\\|?*') == "twitter.com_____"
+    assert strip_illegal('https://twitter.com/<>:"/\\|?*') == "twitter.com__________"
 
-    # Test with URLs already stripped
+    # test with URLs already stripped
     assert strip_illegal("twitter.com") == "twitter.com"
     assert (
         strip_illegal("twitter.com_path_to_file.jpg") == "twitter.com_path_to_file.jpg"
     )
 
-    # Test with empty URL
+    # test with empty URL
     assert strip_illegal("") == ""
